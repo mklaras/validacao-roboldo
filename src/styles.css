@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { color-scheme: light; scroll-behavior: smooth; }
+  body { margin: 0; min-width: 320px; min-height: 100vh; background: #f5f8fc; }
+  button, input, textarea { font: inherit; }
+  ::selection { background: #d9eaff; color: #084b88; }
+}
+
+@layer components {
+  .link { @apply font-medium text-brand-700 underline decoration-brand-100 underline-offset-2 transition hover:decoration-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
