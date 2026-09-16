@@ -1,7 +1,7 @@
 import type { ExperimentData } from '../types/experiment';
 
 const GOOGLE_APPS_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbxHXUXY0WwH-3TP0xYCDkWZaeCzAUu23hXykzmNbDp4qxtIkOoOVGYAQa2JaQoTZG8ywA/exec';
+  'https://script.google.com/macros/s/AKfycbwEE5V5UhiXde1Mmr89awcdjQGZADpC-V0c0nbhjpz18sb1iW4HNc9U7NQzMZrjPT9N/exec';
 
 interface SubmissionResult {
   success: boolean;

@@ -29,12 +29,13 @@ const PARTICIPANTS_HEADERS = [
   'godspeedLikeabilityUnkindKind',
   'godspeedLikeabilityUnpleasantPleasant',
   'godspeedLikeabilityAwfulNice',
+  'scenario',
 ];
 
 const EXPRESSIONS_HEADERS = createExpressionHeaders();
 
 function createExpressionHeaders() {
-  const headers = ['participantId'];
+  const headers = ['participantId', 'scenario'];
   for (let order = 1; order <= 8; order += 1) {
     headers.push(
       `expression${order}Order`,
@@ -56,6 +57,11 @@ function setup() {
 function prepareSheet(spreadsheet, name, headers) {
   let sheet = spreadsheet.getSheetByName(name);
   if (!sheet) sheet = spreadsheet.insertSheet(name);
+
+  const missingColumns = headers.length - sheet.getMaxColumns();
+  if (missingColumns > 0) {
+    sheet.insertColumnsAfter(sheet.getMaxColumns(), missingColumns);
+  }
 
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
@@ -82,7 +88,10 @@ function doPost(event) {
       throw new Error('Execute a função setup antes de receber dados.');
     }
 
-    if (participantExists(participantsSheet, data.participantId)) {
+    const participantRecorded = rowExists(participantsSheet, data.participantId);
+    const expressionsRecorded = rowExists(expressionsSheet, data.participantId);
+
+    if (participantRecorded && expressionsRecorded) {
       return jsonResponse({ success: true, duplicate: true });
     }
 
@@ -90,8 +99,8 @@ function doPost(event) {
     const post = data.postQuestionnaire;
     const godspeed = post.godspeed;
 
-    const expressionRow = [safeText(data.participantId)];
-    data.expressionTrials
+    const expressionRow = [safeText(data.participantId), safeText(data.scenario)];
+    [...data.expressionTrials]
       .sort((first, second) => first.order - second.order)
       .forEach((trial) => {
         expressionRow.push(
@@ -102,9 +111,11 @@ function doPost(event) {
           new Date(trial.timestamp),
         );
       });
-    expressionsSheet.appendRow(expressionRow);
+    if (!expressionsRecorded) {
+      expressionsSheet.appendRow(expressionRow);
+    }
 
-    participantsSheet.appendRow([
+    const participantRow = [
       safeText(data.participantId),
       new Date(data.startedAt),
       new Date(data.finishedAt),
@@ -132,7 +143,12 @@ function doPost(event) {
       godspeed.likeability.unkindKind,
       godspeed.likeability.unpleasantPleasant,
       godspeed.likeability.awfulNice,
-    ]);
+      safeText(data.scenario),
+    ];
+
+    if (!participantRecorded) {
+      participantsSheet.appendRow(participantRow);
+    }
 
     SpreadsheetApp.flush();
     return jsonResponse({ success: true });
@@ -151,6 +167,9 @@ function validateExperiment(data) {
   if (!data || !/^P-\d{6}$/.test(data.participantId || '')) {
     throw new Error('Identificador de participante inválido.');
   }
+  if (data.scenario !== 'cenario1' && data.scenario !== 'cenario2') {
+    throw new Error('Cenário inválido.');
+  }
   if (!data.demographics) {
     throw new Error('Dados demográficos ausentes.');
   }
@@ -162,7 +181,7 @@ function validateExperiment(data) {
   }
 }
 
-function participantExists(sheet, participantId) {
+function rowExists(sheet, participantId) {
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) return false;
 

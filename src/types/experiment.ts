@@ -1,4 +1,4 @@
-import type { Expression } from '../config/expressions';
+import type { Expression, ScenarioId } from '../config/expressions';
 
 export type SocialRobotInteraction = 'Sim' | 'Não' | 'Não sei';
 
@@ -52,6 +52,7 @@ export interface GodspeedQuestionnaire {
 
 export interface ExperimentData {
   participantId: string;
+  scenario: ScenarioId;
   startedAt: string;
   finishedAt?: string;
   demographics?: Demographics;
