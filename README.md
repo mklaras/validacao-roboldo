@@ -27,6 +27,10 @@ npm run preview
 - `src/services/googleSheetsService.ts`: envio dos dados para o Apps Script.
 - `google-apps-script/Code.gs`: endpoint do Apps Script sincronizado com as colunas da planilha.
 
-## Integração futura
+## Integração com Google Sheets
 
-O envio acontece uma única vez, no fim do estudo. Para integrar ao Google Sheets, publique um Google Apps Script como aplicativo da web e troque o mock em `src/services/googleSheetsService.ts` por uma chamada `fetch` com `POST`, serializando o objeto `ExperimentData` em JSON. O Apps Script deverá validar o corpo, gravar os dados nas colunas desejadas e retornar um resultado de sucesso.
+O envio acontece uma única vez, no fim do estudo. `src/services/googleSheetsService.ts` envia o objeto `ExperimentData` para o aplicativo da web do Google Apps Script. A versão sincronizada do endpoint está em `google-apps-script/Code.gs`.
+
+## GitHub Pages
+
+O workflow `.github/workflows/deploy-pages.yml` compila e publica a aplicação automaticamente a cada push na branch `main`. No GitHub, configure `Settings → Pages → Source` como `GitHub Actions`. O endereço esperado é `https://mklaras.github.io/validacao-roboldo/`.
