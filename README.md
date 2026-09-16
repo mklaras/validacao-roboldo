@@ -1,6 +1,6 @@
 # Validação das Expressões do Roboldo
 
-Frontend do estudo presencial do Laboratório de Aprendizado em Robótica (LAR/UERN). A aplicação conduz o participante pelo consentimento, dados demográficos, oito avaliações em ordem fixa, pós-questionário e envio simulado.
+Frontend do estudo presencial do Laboratório de Aprendizagem em Robótica (LAR/UERN). A aplicação conduz o participante pelo consentimento, dados demográficos, oito avaliações em ordem fixa, pós-questionário e envio simulado.
 
 ## Executar
 
@@ -24,7 +24,8 @@ npm run preview
 - `src/config/expressions.ts`: ordem fixa e rótulos das expressões.
 - `src/types/experiment.ts`: estrutura TypeScript dos dados.
 - `src/utils/storage.ts`: persistência temporária no `localStorage`.
-- `src/services/googleSheetsService.ts`: mock que será substituído pela integração.
+- `src/services/googleSheetsService.ts`: envio dos dados para o Apps Script.
+- `google-apps-script/Code.gs`: endpoint do Apps Script sincronizado com as colunas da planilha.
 
 ## Integração futura
 

@@ -5,18 +5,18 @@ import { PrimaryButton } from '../components/PrimaryButton';
 export function ConsentPage({ onContinue }: { onContinue: () => void }) {
   const [accepted, setAccepted] = useState(false);
   return (
-    <PageShell>
+    <PageShell width="max-w-5xl">
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-card sm:p-9">
-        <p className="mb-2 text-sm font-bold text-brand-600">Bem-vindo ao nosso estudo</p>
         <h1 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">Olá, participante!</h1>
         <p className="mt-5 leading-relaxed text-slate-600">Você está prestes a iniciar um estudo que busca responder à seguinte pergunta:</p>
         <blockquote className="mt-3 rounded-xl border-l-4 border-brand-500 bg-brand-50 px-5 py-4 font-semibold leading-relaxed text-ink">“As expressões faciais desenvolvidas para o robô social Roboldo são corretamente reconhecidas por usuários humanos?”</blockquote>
-        <p className="mt-5 leading-relaxed text-slate-600">Somos integrantes do <strong className="text-ink">Laboratório de Aprendizado em Robótica (LAR) da Universidade do Estado do Rio Grande do Norte (UERN).</strong></p>
+        <p className="mt-5 leading-relaxed text-slate-600">Somos integrantes do <strong className="text-ink">Laboratório de Aprendizagem em Robótica (LAR) da Universidade do Estado do Rio Grande do Norte (UERN).</strong></p>
         <div className="mt-7 grid gap-5 border-y border-slate-200 py-6 sm:grid-cols-2">
           <Info title="Dinâmica da interação">Você irá observar diferentes expressões apresentadas por um robô social e responder algumas perguntas com base no que percebeu.</Info>
           <Info title="Duração">Esta é uma atividade rápida e sua participação deverá levar aproximadamente 3 a 5 minutos.</Info>
           <Info title="Confidencialidade">Os questionários são anônimos e confidenciais. Os resultados poderão ser usados em trabalhos científicos sem identificar participantes.</Info>
           <Info title="Voluntariedade">Sua participação é voluntária e você pode desistir a qualquer momento.</Info>
+          <Info title="Riscos">Não são previstos riscos decorrentes da participação neste estudo. Caso se sinta desconfortável, você poderá interromper sua participação a qualquer momento.</Info>
         </div>
         <div className="mt-6 text-sm leading-relaxed text-slate-600">
           <h2 className="mb-2 font-bold text-ink">Contato para esclarecimentos</h2>

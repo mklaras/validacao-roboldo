@@ -48,6 +48,27 @@ export function useExperiment() {
     setSession((current) => ({ ...current, step: 'expression', currentExpressionIndex: Math.min(current.currentExpressionIndex + 1, EXPRESSIONS.length - 1) }));
   }
 
+  function goBack() {
+    setSession((current) => {
+      switch (current.step) {
+        case 'demographics':
+          return { ...current, step: 'consent' };
+        case 'instructions':
+          return { ...current, step: 'demographics' };
+        case 'expression':
+          return current.currentExpressionIndex === 0
+            ? { ...current, step: 'instructions' }
+            : { ...current, step: 'transition', currentExpressionIndex: current.currentExpressionIndex - 1 };
+        case 'transition':
+          return { ...current, step: 'expression' };
+        case 'post':
+          return { ...current, step: 'expression', currentExpressionIndex: EXPRESSIONS.length - 1 };
+        default:
+          return current;
+      }
+    });
+  }
+
   async function finish(postQuestionnaire?: PostQuestionnaire) {
     let payload: ExperimentData;
     if (postQuestionnaire) {
@@ -73,5 +94,5 @@ export function useExperiment() {
     setSession(newSession());
   }
 
-  return { session, acceptConsent, saveDemographics, startExpressions, saveExpression, continueToNextExpression, finish, reset };
+  return { session, acceptConsent, saveDemographics, startExpressions, saveExpression, continueToNextExpression, goBack, finish, reset };
 }

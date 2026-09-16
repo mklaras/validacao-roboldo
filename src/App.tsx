@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Header } from './components/Header';
 import { useExperiment } from './hooks/useExperiment';
 import { ConsentPage } from './pages/ConsentPage';
@@ -12,14 +13,19 @@ import { TransitionPage } from './pages/TransitionPage';
 export default function App() {
   const experiment = useExperiment();
   const { session } = experiment;
+  const canGoBack = ['demographics', 'instructions', 'expression', 'transition', 'post'].includes(session.step);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [session.step, session.currentExpressionIndex]);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f5f8fc] text-ink">
-      <Header />
+      <Header onBack={canGoBack ? experiment.goBack : undefined} />
       {session.step === 'consent' && <ConsentPage onContinue={experiment.acceptConsent} />}
       {session.step === 'demographics' && <DemographicsPage initial={session.data.demographics} onContinue={experiment.saveDemographics} />}
       {session.step === 'instructions' && <InstructionsPage onContinue={experiment.startExpressions} />}
-      {session.step === 'expression' && <ExpressionPage key={session.currentExpressionIndex} index={session.currentExpressionIndex} onContinue={experiment.saveExpression} />}
+      {session.step === 'expression' && <ExpressionPage key={session.currentExpressionIndex} index={session.currentExpressionIndex} initial={session.data.expressionTrials.find((trial) => trial.order === session.currentExpressionIndex + 1)} onContinue={experiment.saveExpression} />}
       {session.step === 'transition' && <TransitionPage completed={session.data.expressionTrials.length} onContinue={experiment.continueToNextExpression} />}
       {session.step === 'post' && <PostQuestionnairePage initial={session.data.postQuestionnaire} onFinish={experiment.finish} />}
       {session.step === 'submitting' && <SubmissionStatusPage onRetry={() => experiment.finish()} />}
