@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Header } from './components/Header';
-import { SCENARIOS } from './config/expressions';
+import { EXPRESSION_OPTIONS, SCENARIOS } from './config/expressions';
 import { useExperiment } from './hooks/useExperiment';
 import { ConsentPage } from './pages/ConsentPage';
 import { DemographicsPage } from './pages/DemographicsPage';
 import { ExpressionPage } from './pages/ExpressionPage';
 import { InstructionsPage } from './pages/InstructionsPage';
 import { PostQuestionnairePage } from './pages/PostQuestionnairePage';
+import { ScenarioSelectionPage } from './pages/ScenarioSelectionPage';
 import { SubmissionStatusPage } from './pages/SubmissionStatusPage';
 import { ThankYouPage } from './pages/ThankYouPage';
 import { TransitionPage } from './pages/TransitionPage';
@@ -14,8 +15,10 @@ import { TransitionPage } from './pages/TransitionPage';
 export default function App() {
   const experiment = useExperiment();
   const { session } = experiment;
-  const expressionCount = SCENARIOS[session.data.scenario].length;
-  const canGoBack = ['demographics', 'instructions', 'expression', 'transition', 'post'].includes(session.step);
+  const expressionCount = session.data.scenario
+    ? SCENARIOS[session.data.scenario].length
+    : EXPRESSION_OPTIONS.length;
+  const canGoBack = ['consent', 'demographics', 'instructions', 'expression', 'transition', 'post'].includes(session.step);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -24,6 +27,7 @@ export default function App() {
   return (
     <div className="flex min-h-screen flex-col bg-[#f5f8fc] text-ink">
       <Header onBack={canGoBack ? experiment.goBack : undefined} />
+      {session.step === 'scenario' && <ScenarioSelectionPage onContinue={experiment.selectScenario} />}
       {session.step === 'consent' && <ConsentPage onContinue={experiment.acceptConsent} />}
       {session.step === 'demographics' && <DemographicsPage initial={session.data.demographics} onContinue={experiment.saveDemographics} />}
       {session.step === 'instructions' && <InstructionsPage onContinue={experiment.startExpressions} />}

@@ -1,6 +1,6 @@
 import type { StoredSession } from '../types/experiment';
 
-const STORAGE_KEY = 'roboldo-experiment-session-v1';
+const STORAGE_KEY = 'roboldo-experiment-session-v2';
 
 export function saveSession(session: StoredSession): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(session));

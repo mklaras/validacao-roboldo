@@ -9,6 +9,8 @@ export const EXPRESSION_OPTIONS = [
   'neutro',
 ] as const;
 
+//mudar isso aqui. Adicionar um botão para escolhermos os cenários manualmente. Retirar esse
+
 export type Expression = (typeof EXPRESSION_OPTIONS)[number];
 export type ScenarioId = 'cenario1' | 'cenario2';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SCENARIOS, selectRandomScenario, type Expression } from '../config/expressions';
+import { SCENARIOS, type Expression, type ScenarioId } from '../config/expressions';
 import { submitExperiment } from '../services/googleSheetsService';
 import type { Demographics, ExperimentData, PostQuestionnaire, StoredSession } from '../types/experiment';
 import { createParticipantId } from '../utils/participantId';
@@ -7,8 +7,8 @@ import { clearSession, loadSession, saveSession } from '../utils/storage';
 
 function newSession(): StoredSession {
   return {
-    step: 'consent', currentExpressionIndex: 0,
-    data: { participantId: createParticipantId(), scenario: selectRandomScenario(), startedAt: '', expressionTrials: [] },
+    step: 'scenario', currentExpressionIndex: 0,
+    data: { participantId: createParticipantId(), startedAt: '', expressionTrials: [] },
   };
 }
 
@@ -16,9 +16,6 @@ export function useExperiment() {
   const [session, setSession] = useState<StoredSession>(() => {
     const stored = loadSession();
     if (!stored) return newSession();
-    if (!stored.data.scenario) {
-      stored.data.scenario = selectRandomScenario();
-    }
     // Uma atualização durante a requisição não deve deixar a interface presa.
     return stored.step === 'submitting' ? { ...stored, step: 'error' } : stored;
   });
@@ -26,6 +23,27 @@ export function useExperiment() {
   useEffect(() => { saveSession(session); }, [session]);
 
   const setStep = (step: StoredSession['step']) => setSession((current) => ({ ...current, step }));
+
+  function selectScenario(scenario: ScenarioId) {
+    setSession((current) => {
+      const scenarioChanged = Boolean(
+        current.data.scenario && current.data.scenario !== scenario,
+      );
+
+      return {
+        ...current,
+        step: 'consent',
+        currentExpressionIndex: scenarioChanged ? 0 : current.currentExpressionIndex,
+        data: {
+          ...current.data,
+          scenario,
+          expressionTrials: scenarioChanged ? [] : current.data.expressionTrials,
+          postQuestionnaire: scenarioChanged ? undefined : current.data.postQuestionnaire,
+          finishedAt: scenarioChanged ? undefined : current.data.finishedAt,
+        },
+      };
+    });
+  }
 
   function acceptConsent() {
     setSession((current) => ({ ...current, step: 'demographics', data: { ...current.data, startedAt: current.data.startedAt || new Date().toISOString() } }));
@@ -40,6 +58,7 @@ export function useExperiment() {
   function saveExpression(selectedExpression: Expression, identificationEase: number) {
     setSession((current) => {
       const index = current.currentExpressionIndex;
+      if (!current.data.scenario) return current;
       const expressions = SCENARIOS[current.data.scenario];
       const trial = { order: index + 1, displayedExpression: expressions[index], selectedExpression, identificationEase, timestamp: new Date().toISOString() };
       const trials = [...current.data.expressionTrials.filter((item) => item.order !== trial.order), trial].sort((a, b) => a.order - b.order);
@@ -49,12 +68,17 @@ export function useExperiment() {
   }
 
   function continueToNextExpression() {
-    setSession((current) => ({ ...current, step: 'expression', currentExpressionIndex: Math.min(current.currentExpressionIndex + 1, SCENARIOS[current.data.scenario].length - 1) }));
+    setSession((current) => {
+      if (!current.data.scenario) return current;
+      return { ...current, step: 'expression', currentExpressionIndex: Math.min(current.currentExpressionIndex + 1, SCENARIOS[current.data.scenario].length - 1) };
+    });
   }
 
   function goBack() {
     setSession((current) => {
       switch (current.step) {
+        case 'consent':
+          return { ...current, step: 'scenario' };
         case 'demographics':
           return { ...current, step: 'consent' };
         case 'instructions':
@@ -66,7 +90,9 @@ export function useExperiment() {
         case 'transition':
           return { ...current, step: 'expression' };
         case 'post':
-          return { ...current, step: 'expression', currentExpressionIndex: SCENARIOS[current.data.scenario].length - 1 };
+          return current.data.scenario
+            ? { ...current, step: 'expression', currentExpressionIndex: SCENARIOS[current.data.scenario].length - 1 }
+            : current;
         default:
           return current;
       }
@@ -98,5 +124,5 @@ export function useExperiment() {
     setSession(newSession());
   }
 
-  return { session, acceptConsent, saveDemographics, startExpressions, saveExpression, continueToNextExpression, goBack, finish, reset };
+  return { session, selectScenario, acceptConsent, saveDemographics, startExpressions, saveExpression, continueToNextExpression, goBack, finish, reset };
 }

@@ -52,7 +52,7 @@ export interface GodspeedQuestionnaire {
 
 export interface ExperimentData {
   participantId: string;
-  scenario: ScenarioId;
+  scenario?: ScenarioId;
   startedAt: string;
   finishedAt?: string;
   demographics?: Demographics;
@@ -60,7 +60,7 @@ export interface ExperimentData {
   postQuestionnaire?: PostQuestionnaire;
 }
 
-export type StudyStep = 'consent' | 'demographics' | 'instructions' | 'expression' | 'transition' | 'post' | 'submitting' | 'error' | 'thanks';
+export type StudyStep = 'scenario' | 'consent' | 'demographics' | 'instructions' | 'expression' | 'transition' | 'post' | 'submitting' | 'error' | 'thanks';
 
 export interface StoredSession {
   step: StudyStep;

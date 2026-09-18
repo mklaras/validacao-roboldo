@@ -1,6 +1,6 @@
 # Validação das Expressões do Roboldo
 
-Frontend do estudo presencial do Laboratório de Aprendizagem em Robótica (LAR/UERN). A aplicação conduz o participante pelo consentimento, dados demográficos, oito avaliações em um de dois cenários sorteados, pós-questionário e envio ao Google Sheets.
+Frontend do estudo presencial do Laboratório de Aprendizagem em Robótica (LAR/UERN). A aplicação permite ao pesquisador escolher um de dois cenários e conduz o participante pelo consentimento, dados demográficos, oito avaliações, pós-questionário e envio ao Google Sheets.
 
 ## Executar
 
