@@ -10,7 +10,7 @@ export function InstructionsPage({ onContinue }: { onContinue: () => void }) {
         <p className="text-sm font-bold text-brand-600">Antes de começar</p>
         <h1 className="mx-auto mt-2 max-w-xl text-3xl font-extrabold leading-tight text-ink">Vamos conhecer um pouco sobre o Roboldo</h1>
         <div className="mx-auto mt-6 max-w-xl space-y-3 leading-relaxed text-slate-600">
-          <p>O Roboldo é um robô social desenvolvido pelo Laboratório de Aprendizagem em Robótica da Universidade do Estado do Rio Grande do Norte — UERN. Neste estudo, o Roboldo apresentará 8 expressões, uma de cada vez.</p>
+          <p>O Roboldo é um robô social desenvolvido pelo Laboratório de Aprendizagem em Robótica da Universidade do Estado do Rio Grande do Norte — UERN. Neste estudo, o Roboldo apresentará 5 expressões, uma de cada vez.</p>
           <p>Observe atentamente o rosto do robô e indique qual expressão você acredita que ele está demonstrando.</p>
         </div>
         <div className="mx-auto mt-7 max-w-lg rounded-2xl border-2 border-brand-100 bg-brand-50 px-5 py-5 text-xl font-extrabold text-brand-700">Observe o Roboldo antes de responder.</div>

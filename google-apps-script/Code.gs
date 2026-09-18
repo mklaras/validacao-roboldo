@@ -173,8 +173,8 @@ function validateExperiment(data) {
   if (!data.demographics) {
     throw new Error('Dados demográficos ausentes.');
   }
-  if (!Array.isArray(data.expressionTrials) || data.expressionTrials.length !== 8) {
-    throw new Error('A participação deve conter 8 expressões.');
+  if (!Array.isArray(data.expressionTrials) || data.expressionTrials.length !== 5) {
+    throw new Error('A participação deve conter 5 expressões.');
   }
   if (!data.postQuestionnaire || !data.postQuestionnaire.godspeed || !data.finishedAt) {
     throw new Error('Pós-questionário incompleto.');

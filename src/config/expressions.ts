@@ -1,10 +1,8 @@
 export const EXPRESSION_OPTIONS = [
-  'confuso',
   'raiva',
   'alegre',
   'surpreso',
   'medo',
-  'triste',
   'neutro',
 ] as const;
 
@@ -22,12 +20,10 @@ export const SCENARIOS: Record<ScenarioId, readonly Expression[]> = {
 };
 
 export const EXPRESSION_LABELS: Record<Expression, string> = {
-  confuso: 'Confuso',
   raiva: 'Raiva',
   alegre: 'Alegre',
   surpreso: 'Surpreso',
   medo: 'Medo',
-  triste: 'Triste',
   neutro: 'Neutro',
 };
 
